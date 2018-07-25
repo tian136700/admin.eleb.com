@@ -2,16 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 
-class ShopUsers extends Model
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class ShopUsers extends Authenticatable
 {
-    //
-    protected $fillable=["name","password","email","status"];
+    use Notifiable;
+
+    protected $fillable=["name","password","email","status","shop_id"];
     //建立和商家之间的关系
     public function category()
     {
         return $this->belongsTo(Shops::class,"shop_id","id");
 
     }
+
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 }

@@ -1,6 +1,13 @@
 @extends('default')
+
+@section("css_files")
+    <link rel="stylesheet" type="text/css" href="/webuploader/webuploader.css">
+@stop
+@section("js_files")
+    <script type="text/javascript" src="/webuploader/webuploader.js"></script>
+@stop
 @section("contents")
-    <form action="{{route("shops.update",[$shop])}}" method="post"  enctype="multipart/form-data">
+    <form action="{{route("shops.update",[$shop])}}" method="post">
         <h1>商家修改</h1>
         @include("_errors")
         <label class="col-xs-2 control-label">商家名</label>
@@ -90,12 +97,16 @@
         <div class="form-group">
             <input type="text" name="discount" class="form-control" style="width: 500px" value="@if(old("discount")){{old("discount")}}@else{{$shop->discount}}@endif"/>
         </div>
-        <label class="col-xs-2 control-label">店铺图片</label>
-        <div class="form-group">
-            <input type="file" name="logo"/>
-            <img width="100" height="100" src="{{\Illuminate\Support\Facades\Storage::url($shop->shop_img)}}" alt="">
-        </div>
 
+        <label>店铺图片</label>
+        <input type="hidden" id="img_url" name="shop_img" value=""/>
+        <!--dom结构部分-->
+        <div id="uploader-demo">
+            <!--用来存放item-->
+            <div id="fileList" class="uploader-list"></div>
+            <div id="filePicker">选择图片</div>
+            <img id="img" src="{{$shop->shop_img}}" alt="">
+        </div>
 
 
 

@@ -18,7 +18,7 @@
 
                 <td>{{$shop->shop_name}}</td>
                 <td>{{$shop->category->name}}</td>
-                <td><img width="50" height="50" src="{{\Illuminate\Support\Facades\Storage::url($shop->shop_img)}}" alt=""></td>
+                <td><img width="50" height="50" src="{{$shop->shop_img}}" alt=""></td>
                 <td>{{$shop->shop_rating}}</td>
                 <td>{{$shop->start_send}}</td>
                 <td>{{$shop->send_cost}}</td>
@@ -36,8 +36,10 @@
                         <button class="btn btn-danger btn-xs">删除</button>
 
                     </form>
-
+                    <a href="{{route("shops.review",["shop"=>$shop])}}"><button class="btn btn-warning btn-xs"><span>商家审核</span></button></a>
+                    <a href="{{route("shops.reset",["shop"=>$shop])}}"><button class="btn btn-danger btn-xs"><span>重置密码</span></button></a>
                 </td>
+
             </tr>
             @endforeach
         <tr><td colspan="9"><a href="{{route("shops.create")}}">

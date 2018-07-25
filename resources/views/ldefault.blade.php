@@ -28,7 +28,7 @@
 
 
 <div class="container">
-    @include('_nav')
+
     @include("_messages")
 @yield("contents")
 

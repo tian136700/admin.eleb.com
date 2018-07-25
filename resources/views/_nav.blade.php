@@ -17,7 +17,9 @@
                 <li><a href="{{route("shopcategories.index")}}">商家分类 <span class="sr-only">(current)</span></a></li>
                 <li><a href="{{route("shops.index")}}">商家 <span class="sr-only">(current)</span></a></li>
                 {{--<li><a href="{{route("goodscategories.index")}}">其他</a></li>--}}
-                <li><a href="{{route("shopusers.index")}}">商家账号</a></li>
+                {{--<li><a href="{{route("shopusers.index")}}">商家账号</a></li>--}}
+                <li><a href="{{route("admins.index")}}">管理员</a></li>
+
                 {{--<li class="dropdown">--}}
                     {{--<a href="{{route("about")}}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">关于 <span class="caret"></span></a>--}}
                     {{--<ul class="dropdown-menu">--}}
@@ -39,9 +41,10 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 @guest
-                <li><a href="#" data-toggle="modal" data-target="#myModal">登陆</a></li>
+                <li><a href="" data-toggle="modal" data-target="#myModal">登陆</a></li>
                 @endguest
                 @auth
+
                 <li><a href="#" data-toggle="modal" data-target="#myModal"></a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{\Illuminate\Support\Facades\Auth::user()->name}} <span class="caret"></span></a>
@@ -50,14 +53,14 @@
                         <li><a href="#">Another action</a></li>
                         <li><a href="#">Something else here</a></li>
                         <li role="separator" class="divider"></li>
-                        <form action="{{route("logout")}}"
+                        <form action="{{route("slogout")}}"
                               method="post">
                             {{ method_field('DELETE') }}
                             {{csrf_field()}}
                             <button class="btn-link">注销</button>
-
+                            {{--<li><a href="">注销</a></li>--}}
                         </form>
-                        {{--<li><a href="{{route("logout")}}">注销</a></li>--}}
+
                     </ul>
                 </li>
                 @endauth
@@ -74,7 +77,7 @@
                 <h4 class="modal-title" id="myModalLabel">用户名密码登陆</h4>
             </div>
             <div class="modal-body ">
-                <form action="{{route("login")}}" method="post">
+                <form action="{{route("slogin")}}" method="post">
                     <div class="form-group">
                         <input type="text" name="name" class="form-control" placeholder="手机/邮箱/用户名">
                     </div>
@@ -87,7 +90,7 @@
                         </label>
                     </div>
                     {{csrf_field()}}
-                    <button class="btn btn-primary btn-block">登陆</button>
+                    <input type="submit" class="btn btn-primary btn-block">
                 </form>
             </div>
             <div class="modal-footer">

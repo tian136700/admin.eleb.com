@@ -1,15 +1,16 @@
-@extends('default')
+@extends('ldefault')
 @section("contents")
-    <form action="{{route("login")}}" method="post">
-        <h1>登陆页</h1>
+    <div style="padding-left: 287px;padding-top: 9px">
+    <form action="{{route("slogin")}}" method="post">
+        <div style="padding-left: 201px;font-size: 25px; font-family:'微软雅黑';">登陆页</div>
         @include("_errors")
         <label>用户名</label>
         <div class="form-group">
-            <input type="text" name="name" class="form-control" value="{{old("name")}}"/>
+            <input type="text" name="name" style="width: 500px" class="form-control" value="{{old("name")}}"/>
         </div>
         <label>密码</label>
         <div class="form-group ">
-            <input type="password" name="password" class="form-control" value="{{old("name")}}"/>
+            <input type="password" name="password"  style="width: 500px" class="form-control" value="{{old("name")}}"/>
         </div>
         <div class="checkbox">
             <label for="">
@@ -18,9 +19,10 @@
         </div>
 
         {{csrf_field()}}
-        <div class="form-group text-center">
+        <div class="form-group" style="padding-left: 195px">
             <button class="btn btn-primary ">登陆</button>
         </div>
 
     </form>
+    </div>
 @endsection

@@ -12,7 +12,7 @@
                 <td>{{$shopcategory->id}}</td>
 
                 <td>{{$shopcategory->name}}</td>
-                <td><img width="50" height="50" src="{{\Illuminate\Support\Facades\Storage::url($shopcategory->img)}}" alt=""></td>
+                <td><img width="50" height="50" src="{{$shopcategory->img}}" alt=""></td>
 
                 <td>
                     <a href="{{route("shopcategories.edit",["shopcategory"=>$shopcategory])}}"><button class="btn btn-primary btn-xs"><span>编辑</span></button></a>

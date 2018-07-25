@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Shops extends Model
 {
 
-    protected $fillable=["shop_name","shop_category_id","brand","on_time","fengniao","bao","piao","zhun","start_send","send_cost","notice","discount","shop_img"];
+    protected $fillable=["shop_name","shop_category_id","brand","on_time","fengniao","bao","piao","zhun","start_send","send_cost","notice","discount","shop_img",'status'];
     //建立和分类之间的关系
     public function category()
     {

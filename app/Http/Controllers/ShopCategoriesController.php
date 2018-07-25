@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\ShopCategories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ShopCategoriesController extends Controller
 {
-    //店铺分类页
+   //店铺分类页
     public function index()
     {
         $shopcategories = ShopCategories::all();
@@ -37,9 +38,9 @@ class ShopCategoriesController extends Controller
                 'img'=> ""
             ];
         //进行判断
-        $file = $request->img;
-        if ($file) {
-            $filename = $file->store("public/logo");
+        $filename = $request->img;
+        if ($filename) {
+
             $data=['name' => $request->name,
                 'status' => $request->status,
                     'img'=>$filename
