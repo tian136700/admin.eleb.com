@@ -22,6 +22,7 @@ Route::get('/shopsreview/{review}', 'ShopsController@review')->name("shops.revie
 Route::post('/shopsreview/{review}', 'ShopsController@updateReview')->name("shops.updatereview");
 Route::resource('shops', 'ShopsController');
 Route::resource('shopusers', 'ShopUsersController');
+//管理员管理
 Route::resource('admins', 'AdminsController');
 
 Route::get('slogin', 'SessionsController@create')->name('slogin');
@@ -44,3 +45,15 @@ Route::post("upload",function (){
 Route::group(['middleware' => 'check.login'], function() {
     Route::get('/slogin', 'SessionsController@create')->name('slogin');
 });
+//禁用会员功能
+Route::get('/members/disable/{member}', 'MemberController@disable')->name('members.disable');
+//会员管理
+Route::resource('members', 'MemberController');
+
+//统计
+Route::get('/count/index', 'CountController@index')->name('count.index');
+Route::get('/count/menus', 'CountController@menus')->name('countmenus.index');
+//权限管理
+Route::resource('permissions', 'PermissionController');
+//角色管理
+Route::resource('roles', 'RoleController');

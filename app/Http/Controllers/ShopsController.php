@@ -89,7 +89,7 @@ class ShopsController extends Controller
         try {
             Shops::create($data);
             //获取插入的商户id
-            $id = DB::getPdo()->lastInsertId();;
+            $id = DB::getPdo()->lastInsertId();
             $userdata = ["name" => $request->name,
                 "email" => $request->email,
                 "password" => bcrypt($request->password),

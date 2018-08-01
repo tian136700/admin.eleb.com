@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admins;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class AdminsController extends Controller
 {
-    public function __construct()
-    {
-         $this->middleware("check.login", [
-            "except" => [],
-        ]);
-//        dd($a->except);
-
-    }
+//    public function __construct()
+//    {
+//         $this->middleware("check.login", [
+//            "except" => [],
+//        ]);
+//
+//    }
 
     //管理员页
     public function index()
@@ -26,7 +26,8 @@ class AdminsController extends Controller
     //增加数据
     public function create()
     {
-        return view("admins/create");
+        $roles = \Spatie\Permission\Models\Role::all();
+        return view("admins/create",compact("roles"));
     }
 
     //添加保存
@@ -66,7 +67,8 @@ class AdminsController extends Controller
     //修改回显
     public function edit(Admins $admin)
     {
-        return view("admins/edit", compact("admin"));
+        $roles = \Spatie\Permission\Models\Role::all();
+        return view("admins/edit", compact("admin","roles"));
     }
 
     //修改保存

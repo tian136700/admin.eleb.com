@@ -19,7 +19,13 @@
         <div class="form-group">
             <input type="password" name="repassword" class="form-control" value=""/>
         </div>
+        <label>角色</label>
+        <div class="form-group">
+            @foreach($roles as $role)
 
+                <input type="checkbox" name="role[]" value="{{$role->id}}">{{$role->name}}&emsp;
+            @endforeach
+        </div>
         {{ method_field('PATCH') }}
         {{csrf_field()}}
         <button class="btn btn-primary">提交</button>
