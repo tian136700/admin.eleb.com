@@ -8,11 +8,6 @@
             <input type="text" name="name" style="width: 500px" class="form-control"
                    value="{{$permission->name}}"/>
         </div>
-        <label class="col-xs-2 control-label">描述</label>
-        <div class="form-group">
-            <input type="text" name="guard_name" class="form-control" style="width: 500px"
-                   value="@if(old("guard_name")){{old("guard_name")}}@else{{$permission->guard_name}}@endif"/>
-        </div>
 
         {{ method_field('PATCH') }}
         {{csrf_field()}}

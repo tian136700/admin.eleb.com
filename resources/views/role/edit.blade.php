@@ -8,15 +8,11 @@
             <input type="text" name="name" style="width: 500px" class="form-control"
                    value="{{$role->name}}"/>
         </div>
-        <label class="col-xs-2 control-label">描述</label>
-        <div class="form-group">
-            <input type="text" name="guard_name" class="form-control" style="width: 500px"
-                   value="@if(old("guard_name")){{old("guard_name")}}@else{{$role->guard_name}}@endif"/>
-        </div>
+
         <div class="form-group">
             @foreach($permissions as $permission)
 
-                <input type="checkbox" name="permission[]" value="{{$permission->name}}">{{$permission->guard_name}}&emsp;
+                <input type="checkbox" {{$role->hasPermissionTo($permission->name)?"checked":""}} name="permission[]" value="{{$permission->name}}">{{$permission->name}}&emsp;
             @endforeach
         </div>
         {{ method_field('PATCH') }}

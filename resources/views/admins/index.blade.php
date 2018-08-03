@@ -38,4 +38,5 @@
                 </a></td>
         </tr>
     </table>
+    {{ $admins->links() }}
 @endsection

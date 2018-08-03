@@ -7,6 +7,7 @@ use App\Models\Shops;
 use App\Models\ShopUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class ShopsController extends Controller
 {
@@ -212,19 +213,53 @@ class ShopsController extends Controller
         return view("shops/review", compact("review", "categories"));
     }
 
+//发送邮件
+    public function sendEmail($content)
+    {
+
+
+        Mail::raw($content,function ($message){
+
+            $message-> subject("您的信息已审核通过了！");
+            $message-> to("18502821645@163.com");
+            $message->from("18502821645@163.com","18502821645");
+//            $message->sender($address, $name = null);
+//            $message->to($address, $name = null);
+//            $message->cc($address, $name = null);
+//            $message->bcc($address, $name = null);
+//            $message->replyTo($address, $name = null);
+//            $message->subject($subject);
+//            $message->priority($level);
+//            $message->attach($pathToFile, array $options = []);
+        });
+
+    }
+
     //审核状态更新
     public function updateReview(Shops $review, Request $request)
     {
         $data = ['status' => $request->status,];
-        $review->update($data);
-        //跳转提示信息
-        session()->flash("success", "状态更新成功！");
-        return redirect()->route("shops.show", [$review]);
+        $result = $review->update($data);
+        if ($result) {
+
+            //跳转提示信息
+            session()->flash("success", "状态更新成功！");
+            //发送成功邮件
+            $this->sendEmail("您的信息已审核通过");
+            return redirect()->route("shops.show", [$review]);
+
+        } else {
+            //跳转提示信息
+            session()->flash("danger", "审核失败！");
+            return redirect()->route("shops.show", [$review]);
+        }
+
     }
+
     //重置密码功能页面
     public function reset(Shops $shop)
     {
-        return view("shops/reset",compact("shop"));
+        return view("shops/reset", compact("shop"));
     }
 
     //重置密码提交

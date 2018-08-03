@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admins;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -28,24 +29,19 @@ class RoleController extends Controller
     //添加保存
     public function store(Request $request)
     {
-//        dd($request->permission);
 
         //数据表单验证
         $this->validate($request, [
             "name" => "required|max:50",
-//            "guard_name" => "required",
 
         ], [
             "name.required" => "名称不能为空！",
             "name.max" => "名称不能超过50个字！",
-//            "guard_name.required" => "描述不能为空！",
         ]);
 
 
         $data = ['name' => $request->name,
-//            'guard_name' => $request->guard_name,
         ];
-
 
         $role = Role::create($data);
         $role->givePermissionTo($request->permission);
@@ -59,6 +55,7 @@ class RoleController extends Controller
     public function edit(Role $role)
     {
         $permissions = Permission::all();
+
         return view("role/edit", compact("role", "permissions"));
     }
 
@@ -68,19 +65,27 @@ class RoleController extends Controller
         //数据表单验证
         $this->validate($request, [
             "name" => "required|max:50",
-            "guard_name" => "required",
 
         ], [
             "name.required" => "名称不能为空！",
             "name.max" => "名称不能超过50个字！",
-            "guard_name.required" => "描述不能为空！",
         ]);
 
 
         $data = ['name' => $request->name,
-            'guard_name' => $request->guard_name,
         ];
+        dd($role->permission);
         $role->update($data);
+
+        $permissions = Permission::all();
+        foreach ($permissions as $permission) {
+            if (!in_array($permission->name,$role->permission)){
+                $role->revokePermissionTo($permission);
+            }
+
+        }
+
+        $role->givePermissionTo($request->permission);
         //跳转提示信息
         session()->flash("success", "更新成功！");
         return redirect()->route("roles.index", [$role]);
@@ -89,9 +94,16 @@ class RoleController extends Controller
     //删除
     public function destroy(Role $role)
     {
+        $permissions = Permission::all();
+        foreach ($permissions as $permission) {
+            $role->revokePermissionTo($permission);
+
+        }
         $role->delete();
+
         //跳转提示信息
         session()->flash("success", "删除成功！");
         return redirect()->route("roles.index");
     }
+
 }

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admins;
-use App\Models\Role;
 use Illuminate\Http\Request;
-
+use Spatie\Permission\Models\Role;
 class AdminsController extends Controller
 {
 //    public function __construct()
@@ -19,14 +18,14 @@ class AdminsController extends Controller
     //管理员页
     public function index()
     {
-        $admins = Admins::all();
+        $admins = Admins::Paginate(5);
         return view("admins/index", compact("admins"));
     }
 
     //增加数据
     public function create()
     {
-        $roles = \Spatie\Permission\Models\Role::all();
+        $roles = Role::all();
         return view("admins/create",compact("roles"));
     }
 
@@ -58,7 +57,9 @@ class AdminsController extends Controller
                 'email' =>$request->email,
             ];
 
-        Admins::create($data);
+        $admin = Admins::create($data);
+
+        $admin->assignRole($request->role);
         //跳转提示信息
         session()->flash("success", "添加成功！");
         return redirect()->route("admins.index");
@@ -67,7 +68,7 @@ class AdminsController extends Controller
     //修改回显
     public function edit(Admins $admin)
     {
-        $roles = \Spatie\Permission\Models\Role::all();
+        $roles = Role::all();
         return view("admins/edit", compact("admin","roles"));
     }
 
@@ -99,6 +100,11 @@ class AdminsController extends Controller
             'email' =>$request->email,
         ];
         $admin->update($data);
+        $roles = Role::all();
+        foreach ($roles as $role){
+            $admin->removeRole($role->name);
+        }
+        $admin->assignRole($request->role);
         //跳转提示信息
         session()->flash("success", "更新成功！");
         return redirect()->route("admins.index");
@@ -107,7 +113,10 @@ class AdminsController extends Controller
     //删除
     public function destroy(Admins $admin)
     {
-
+        $roles = Role::all();
+        foreach ($roles as $role){
+            $admin->removeRole($role->name);
+        }
         $admin->delete();
         //跳转提示信息
         session()->flash("success", "删除成功！");

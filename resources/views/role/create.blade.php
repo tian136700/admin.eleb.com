@@ -18,7 +18,7 @@
         <div class="form-group">
             @foreach($permissions as $permission)
 
-            <input type="checkbox" name="permission[]" value="{{$permission->name}}">{{$permission->guard_name}}&emsp;
+            <input type="checkbox" name="permission[]" value="{{$permission->name}}">{{$permission->name}}&emsp;
                 @endforeach
         </div>
         {{csrf_field()}}

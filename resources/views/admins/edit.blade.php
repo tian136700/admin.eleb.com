@@ -23,7 +23,7 @@
         <div class="form-group">
             @foreach($roles as $role)
 
-                <input type="checkbox" name="role[]" value="{{$role->id}}">{{$role->name}}&emsp;
+                <input type="checkbox" name="role[]" {{$admin->hasRole($role->name)?"checked":""}} value="{{$role->id}}">{{$role->name}}&emsp;
             @endforeach
         </div>
         {{ method_field('PATCH') }}
