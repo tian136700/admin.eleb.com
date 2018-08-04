@@ -2,16 +2,10 @@
 @section("contents")
     <form action="{{route("eventprizes.update",[$eventprize])}}" method="post">
         <h1>修改抽奖活动奖品</h1>
+        <h3 style="color: red">{{$event->title}}</h3>
+        <br><br><br>
         @include("_errors")
-        <label class="col-xs-2 control-label">活动名称</label>
-        <div class="form-group">
-            <div class="form-group">
-                <select name="events_id" id="">
-                    @foreach($events as $event)
-                        <option value="{{$event->id}}"  {{$event->id==$eventprize->event->id?"selected":""}}>{{$event->title}}</option>
-                    @endforeach
-                </select>
-        </div>
+        <input type="hidden" name="events_id" value="{{$event->id}}">
             <label class="col-xs-2 control-label">奖品名称</label>
             <div class="form-group">
                 <input type="text" name="name" style="width: 500px" class="form-control"

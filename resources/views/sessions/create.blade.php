@@ -1,7 +1,7 @@
 @extends('ldefault')
 @section("contents")
     <div style="padding-left: 287px;padding-top: 9px">
-    <form action="{{route("slogin")}}" method="post">
+    <form action="{{route("login")}}" method="post">
         <div style="padding-left: 201px;font-size: 25px; font-family:'微软雅黑';">登陆页</div>
         @include("_errors")
         <label>用户名</label>

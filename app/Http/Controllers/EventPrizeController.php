@@ -10,19 +10,26 @@ class EventPrizeController extends Controller
 {
 
     //主页
-    public function index()
+    public function index(Request $request)
     {
+        //获取抽奖活动名称
+        $event_id = $request->id;
+        //获取是否开奖状态
+        $status = Event::where("id", $event_id)->first()->is_prize;
+        $eventprizes = EventPrize::where("events_id", $request->id)->Paginate(5);
 
-        $eventprizes = EventPrize::Paginate(5);
-
-        return view("eventprize/index", compact("eventprizes"));
+        return view("eventprize/index", compact("eventprizes", "status", "event_id"));
     }
 
 //增加数据
-    public function create()
+    public function create(Request $request)
     {
-        $events = Event::all();
-        return view("eventprize/create", compact("events"));
+        //获取抽奖活动id
+        $event_id = $request->event_id;
+
+        $event = Event::find($event_id);
+
+        return view("eventprize/create", compact("event"));
     }
 
 //添加保存
@@ -46,22 +53,20 @@ class EventPrizeController extends Controller
             'events_id' => $request->events_id,
 
         ];
-
         //写入数据
         EventPrize::create($data);
         //跳转提示信息
         session()->flash("success", "添加成功！");
-        return redirect()->route("eventprizes.index");
+        return redirect()->route("eventprizes.index", ["id" => $request->events_id]);
 
     }
 
 
-
 //修改回显
-    public function edit(eventprize $eventprize)
+    public function edit(EventPrize $eventprize)
     {
-        $events = Event::all();
-        return view("eventprize/edit", compact("eventprize","events"));
+        $event=Event::find($eventprize->events_id);
+        return view("eventprize/edit", compact("eventprize", "event"));
     }
 
 //修改保存
@@ -90,7 +95,7 @@ class EventPrizeController extends Controller
         $eventprize->update($data);
         //跳转提示信息
         session()->flash("success", "更新成功！");
-        return redirect()->route("eventprizes.show", [$eventprize]);
+        return redirect()->route("eventprizes.index", ["id"=>$eventprize->events_id]);
     }
 
 //删除
@@ -99,6 +104,6 @@ class EventPrizeController extends Controller
         $eventprize->delete();
         //跳转提示信息
         session()->flash("success", "删除成功！");
-        return redirect()->route("eventprizes.index");
+        return redirect()->route("eventprizes.index", ["id"=>$eventprize->events_id]);
     }
 }

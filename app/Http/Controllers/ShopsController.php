@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Mail;
 
 class ShopsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     //主页
     public function index()
     {
@@ -218,11 +223,11 @@ class ShopsController extends Controller
     {
 
 
-        Mail::raw($content,function ($message){
+        Mail::raw($content, function ($message) {
 
-            $message-> subject("您的信息已审核通过了！");
-            $message-> to("18502821645@163.com");
-            $message->from("18502821645@163.com","18502821645");
+            $message->subject("您的信息已审核通过了！");
+            $message->to("18502821645@163.com");
+            $message->from("18502821645@163.com", "18502821645");
 //            $message->sender($address, $name = null);
 //            $message->to($address, $name = null);
 //            $message->cc($address, $name = null);

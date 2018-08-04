@@ -12,7 +12,7 @@
         <div class="form-group">
             @foreach($permissions as $permission)
 
-                <input type="checkbox" {{$role->hasPermissionTo($permission->name)?"checked":""}} name="permission[]" value="{{$permission->name}}">{{$permission->name}}&emsp;
+                <input  name="permission[]" type="checkbox" {{$role->hasPermissionTo($permission->name)?"checked":""}}  value="{{$permission->name}}">{{$permission->name}}&emsp;
             @endforeach
         </div>
         {{ method_field('PATCH') }}

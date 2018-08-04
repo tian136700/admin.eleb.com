@@ -29,11 +29,11 @@
                            aria-expanded="false">{{\Illuminate\Support\Facades\Auth::user()->name}} <span
                                     class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li><a href="#">Something else here</a></li>
+                            {{--<li><a href="#">Action</a></li>--}}
+                            {{--<li><a href="#">Another action</a></li>--}}
+                            {{--<li><a href="#">Something else here</a></li>--}}
                             <li role="separator" class="divider"></li>
-                                <li class="btn-link"><a href="{{route("slogout")}}">注销</a></li>
+                                <li class="btn-link"><a href="{{route("logout")}}">注销</a></li>
 
                         </ul>
                     </li>
@@ -52,7 +52,7 @@
                 <h4 class="modal-title" id="myModalLabel">用户名密码登陆</h4>
             </div>
             <div class="modal-body ">
-                <form action="{{route("slogin")}}" method="post">
+                <form action="{{route("login")}}" method="post">
                     <div class="form-group">
                         <input type="text" name="name" class="form-control" placeholder="手机/邮箱/用户名">
                     </div>

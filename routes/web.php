@@ -20,15 +20,13 @@ Auth::routes();
 Route::resource('shopcategories', 'ShopCategoriesController');
 Route::get('/shopsreview/{review}', 'ShopsController@review')->name("shops.review");
 Route::post('/shopsreview/{review}', 'ShopsController@updateReview')->name("shops.updatereview");
-Route::resource('shops', 'ShopsController')/*->middleware(["role:shopadmin"])*/
-;
+
+Route::resource('shops', 'ShopsController')/*->middleware('auth')*/;
 Route::resource('shopusers', 'ShopUsersController');
 //管理员管理
 Route::resource('admins', 'AdminsController');
 
-Route::get('slogin', 'SessionsController@create')->name('slogin');
-Route::post('slogin', 'SessionsController@store')->name('slogin');
-Route::get('sdelete', 'SessionsController@destroy')->name('slogout');
+
 Route::get("shops/reset/{shop}", "ShopsController@reset")->name("shops.reset");
 Route::post("shops/updatereset/{shop}", "ShopsController@updateReset")->name("shops.updatereset");
 
@@ -43,9 +41,13 @@ Route::post("upload", function () {
 })->name("upload");
 
 //未登录用户跳转
-Route::group(['middleware' => 'check.login'], function () {
-    Route::get('/slogin', 'SessionsController@create')->name('slogin');
-});
+//Route::group(['middleware' => 'check.login'], function () {
+//    Route::get('/login', 'SessionsController@create')->name('login');
+//});
+
+Route::get('login', 'SessionsController@create')->name('login');
+Route::post('login', 'SessionsController@store')->name('login');
+Route::get('delete', 'SessionsController@destroy')->name('logout');
 //禁用会员功能
 Route::get('/members/disable/{member}', 'MemberController@disable')->name('members.disable');
 //会员管理
@@ -65,11 +67,12 @@ Route::resource('navs', 'NavController');
 Route::get('/events/{event}/eventresult', 'EventController@eventResult')->name("events.eventresult");
 //抽奖活动
 Route::resource('events', 'EventController');
+//进入奖品列表
 
 //抽奖活动奖品
 Route::resource('eventprizes', 'EventPrizeController');
 //发送邮件测试
-Route::get("email","EventController@sendEmail");
+Route::get("email", "EventController@sendEmail");
 
 
 

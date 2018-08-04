@@ -14,4 +14,9 @@ class EventPrize extends Model
         return $this->belongsTo(Event::class,"events_id","id");
 
     }
+    public function shop()
+    {
+        return $this->belongsTo(Shops::class,"shop_id","id");
+
+    }
 }

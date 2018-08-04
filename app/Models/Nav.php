@@ -30,9 +30,9 @@ class Nav extends Model
 
             $children_html = "";
             foreach ($nav->children as $child) {
-//                if (auth()->user()->can($child->permission->name)) {
+                if (auth()->user()->can($child->permission->name)) {
                     $children_html .= '<li><a href="' . route($child->url) . '">' . $child->name . '</a></li>';
-//                }
+                }
 
             }
             if (empty($children_html)) continue;

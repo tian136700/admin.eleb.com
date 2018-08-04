@@ -18,31 +18,40 @@
                 <td>{{$event->id}}</td>
 
                 <td>{{$event->title}}</td>
-                <td>{{$event->signup_start}}</td>
-                <td>{{$event->signup_end}}</td>
-                <td>{{$event->prize_date}}</td>
+                <td>{{date("Y-m-d H:i",$event->signup_start)}}</td>
+                <td>{{date("Y-m-d H:i",$event->signup_end)}}</td>
+                <td>{{date("Y-m-d H:i",$event->prize_date)}}</td>
                 <td>{{$event->signup_num}}</td>
                 <td>{{$event->is_prize==1?"已开奖":"未开奖"}}</td>
-<td>
-    <a href="{{route("events.show",["event"=>$event])}}"><button class="btn btn-success btn-xs"><span>查看</span></button></a>
+                <td>
+                    <a href="{{route("events.show",["event"=>$event])}}">
+                        <button class="btn btn-success btn-xs"><span>查看</span></button>
+                    </a>
                     {{--编辑--}}
-    
-                    <a href="{{route("events.edit",["event"=>$event])}}"><button class="btn btn-primary btn-xs"><span>编辑</span></button></a>
-                    <form  style="margin:0px;display:inline;" action="{{route("events.destroy",["event"=>$event])}}"  method="post">
+
+                    <a href="{{route("events.edit",["event"=>$event])}}">
+                        <button class="btn btn-primary btn-xs"><span>编辑</span></button>
+                    </a>
+                    <form style="margin:0px;display:inline;" action="{{route("events.destroy",["event"=>$event])}}"
+                          method="post">
                         {{ method_field('DELETE') }}
                         {{csrf_field()}}
                         <button class="btn btn-danger btn-xs">删除</button>
 
                     </form>
-    {{--<a href="{{route("events.start",["event"=>$event])}}"><button class="btn btn-success btn-xs"><span>进入抽奖</span></button></a>--}}
+                    <a href="{{route("eventprizes.index",["id"=>$event->id])}}">
+                        <button class="btn btn-success btn-xs"><span>奖品列表</span></button>
+                    </a>
                 </td>
 
             </tr>
-            @endforeach
-        <tr><td colspan="9"><a href="{{route("events.create")}}">
+        @endforeach
+        <tr>
+            <td colspan="9"><a href="{{route("events.create")}}">
                     <button class="btn btn-primary" type="submit">新增抽奖</button>
-                </a></td></tr>
+                </a></td>
+        </tr>
     </table>
 
     {{$events->links()}}
-    @endsection
+@endsection

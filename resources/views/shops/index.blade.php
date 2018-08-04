@@ -29,7 +29,9 @@
 {{--                    <a href="{{route("shops.show",["article"=>$article])}}">查看</a>--}}
                     <a href="{{route("shops.show",["shop"=>$shop])}}"><button class="btn btn-success btn-xs"><span>查看</span></button></a>
                     {{--编辑--}}
+                    {{--@can("editshop")--}}
                     <a href="{{route("shops.edit",["shop"=>$shop])}}"><button class="btn btn-primary btn-xs"><span>编辑</span></button></a>
+                    {{--@endcan--}}
                     <form  style="margin:0px;display:inline;" action="{{route("shops.destroy",["shop"=>$shop])}}"  method="post">
                         {{ method_field('DELETE') }}
                         {{csrf_field()}}

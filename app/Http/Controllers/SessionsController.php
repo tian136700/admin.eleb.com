@@ -11,7 +11,7 @@ class SessionsController extends Controller
     //
     public function create()
     {
-//        if(Auth::check()){
+//        if (Auth::check()) {
 //            //用户已登陆
 //            return redirect("/shops");
 //        }
@@ -25,7 +25,7 @@ class SessionsController extends Controller
         if (Auth::attempt([
             "name" => $request->name,
             "password" => $request->password
-        ],$request->remember)
+        ], $request->remember)
         ) {
             return redirect("/shops")->with("success", "登陆成功！");
         } else {
@@ -45,10 +45,9 @@ class SessionsController extends Controller
     //注销
     public function destroy()
     {
-//        dd(1111);
         Auth::logout();
 
-        return redirect()->route("slogin")->with("success", "注销成功");
+        return view("sessions/create");
     }
 
 }

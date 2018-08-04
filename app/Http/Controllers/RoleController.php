@@ -44,7 +44,9 @@ class RoleController extends Controller
         ];
 
         $role = Role::create($data);
-        $role->givePermissionTo($request->permission);
+        if (!empty($request->permission)){
+            $role->givePermissionTo($request->permission);
+        }
         session()->flash("success", "添加成功！");
         return redirect()->route("roles.index");
 
@@ -74,18 +76,18 @@ class RoleController extends Controller
 
         $data = ['name' => $request->name,
         ];
-        dd($role->permission);
         $role->update($data);
 
         $permissions = Permission::all();
         foreach ($permissions as $permission) {
-            if (!in_array($permission->name,$role->permission)){
-                $role->revokePermissionTo($permission);
-            }
-
+            //先移除权限
+            $permission->removeRole($role);
         }
 
-        $role->givePermissionTo($request->permission);
+        if (!empty($request->permission)){
+            $role->givePermissionTo($request->permission);
+        }
+
         //跳转提示信息
         session()->flash("success", "更新成功！");
         return redirect()->route("roles.index", [$role]);

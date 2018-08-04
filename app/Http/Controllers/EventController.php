@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\EventMember;
 use App\Models\EventPrize;
 use App\Models\Shops;
+use App\Models\ShopUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -29,7 +30,7 @@ class EventController extends Controller
     //添加保存
     public function store(Request $request)
     {
-
+//        dd($request->signup_start);
         //数据表单验证
         $this->validate($request, [
             "title" => "required|max:50",
@@ -44,9 +45,9 @@ class EventController extends Controller
         //组成要写入的数据
         $data = ['title' => $request->title,
             'content' => $request->content,
-            'signup_start' => $request->signup_start,
-            'signup_end' => $request->signup_end,
-            'prize_date' => $request->prize_date,
+            'signup_start' => strtotime($request->signup_start),
+            'signup_end' => strtotime($request->signup_end),
+            'prize_date' => strtotime($request->prize_date),
             'signup_num' => $request->signup_num,
             'is_prize' => $request->is_prize??0,
         ];
@@ -62,6 +63,7 @@ class EventController extends Controller
     //查看页面
     public function show(Event $event)
     {
+
         //抽奖状态
         $arr = "";
         return view("event/show", compact("event", "arr"));
@@ -70,6 +72,7 @@ class EventController extends Controller
     //修改回显
     public function edit(Event $event)
     {
+
         return view("event/edit", compact("event"));
     }
 
@@ -90,9 +93,9 @@ class EventController extends Controller
         //组成要写入的数据
         $data = ['title' => $request->title,
             'content' => $request->content,
-            'signup_start' => $request->signup_start,
-            'signup_end' => $request->signup_end,
-            'prize_date' => $request->prize_date,
+            'signup_start' => strtotime($request->signup_start),
+            'signup_end' => strtotime($request->signup_end),
+            'prize_date' => strtotime($request->prize_date),
             'signup_num' => $request->signup_num,
             'is_prize' => $request->is_prize??0,
         ];
@@ -117,7 +120,6 @@ class EventController extends Controller
         //获取活动奖品
         $prizesId = EventPrize::where("events_id", $event->id)->select("id")->get()->toArray();
 
-        $count = count($prizesId);
         //把二维数组变成一维数组
         $prizesId = array_column($prizesId, 'id');
         //取出报名商家id
@@ -133,58 +135,33 @@ class EventController extends Controller
         foreach ($prizesId as $key => $value) {
             if (empty($eventMembersId[$key])) break;
             $result[$value] = $eventMembersId[$key];
-
+            //把获奖信息更新入得奖表
+            EventPrize::where("id", $prizesId[$key])->update(["shop_id" => $result[$value]]);
+            //把获奖信息发送给用户
+            //获取用户邮箱
+            $email = ShopUsers::where("shop_id", $result[$value])->select("email")->first()->email;
+            //发送邮件给用户
+            $this->sendEmail("你中奖了", $email);
         }
-//        dd($result);
-//        $emcount = count($eventMembers);
-//        $arr = $eventMembers;
-//
-//        //获取商家信息
-//        $shops = Shops::all();
-//        $lcount = count($shops);
-//        for ($i = 0; $i < $lcount; $i++) {
-//            for ($j = 0; $j < $emcount; $j++) {
-//                if ($eventMembers[$j]["shop_id"] === $shops[$i]->id) {
-//                    $arr[$j]["shop_name"] = $shops[$i]->shop_name;
-//                }
-//            }
-//        }
-//        //打乱数组
-//        shuffle($arr);
-//
-//        $newArr = [];
-////        dd($arr);
-//        //弹出四个
-//        for ($i = 0; $i < $count; $i++) {
-//            $newArr[$i]["shop_name"] = $arr[$i]["shop_name"];
-//            $newArr[$i]["events_id"] = $arr[$i]["events_id"];
-//            $newArr[$i]["shop_id"] = $arr[$i]["shop_id"];
-//            //加入中奖奖品
-//            $newArr[$i]["prize"] = $prizes[$i]->name;
-//            $prizes[$i]->update(["shop_id" => $arr[$i]["shop_id"]]);
-//
-//        }
-        //把中奖信息写入数据表
-        //更新活动表
+
+        //更新抽奖状态;
         $event->update(['is_prize' => 1]);
-        //调用发邮件的功能给商家发送邮件
-//        $this->sendEmail("你中奖了","493701289@qq.com");
+        //查询得奖表里面的信息
+        $eventPrizes = EventPrize::where("events_id", $event->id)->get();
+
         //取出中奖奖品id和名称
-        return view("event/result", compact("event", "newArr"));
+        return view("event/result", compact("eventPrizes"));
 
     }
 
     //发送邮件
     public function sendEmail($content, $userEmail)
     {
-
-
         Mail::raw($content, function ($message) use ($userEmail) {
 
             $message->subject("您中奖了！");
             $message->to($userEmail);
             $message->from("18502821645@163.com", "18502821645");
-
         });
 
     }
