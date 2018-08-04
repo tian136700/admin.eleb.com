@@ -12,7 +12,7 @@
 */
 
 //Route::get('/', function () {
-//    return view('welcome');
+//    return view('shops/index');
 //});
 //商家
 //Route::resource('users', 'UsersController');
