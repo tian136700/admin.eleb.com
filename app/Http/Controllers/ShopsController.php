@@ -8,6 +8,7 @@ use App\Models\ShopUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 
 class ShopsController extends Controller
 {
@@ -105,6 +106,8 @@ class ShopsController extends Controller
             ShopUsers::create($userdata);
             //提交事物
             DB::commit();
+            //添加后更新redis
+            Redis::set("status",2);
             //跳转提示信息
             session()->flash("success", "添加成功！");
             return redirect()->route("shops.index");
@@ -199,7 +202,7 @@ class ShopsController extends Controller
         $shop->update($data);
         //跳转提示信息
         session()->flash("success", "更新成功！");
-        return redirect()->route("shops.show", [$shop]);
+        return redirect()->route("shops.index");
     }
 
 //删除
@@ -244,11 +247,14 @@ class ShopsController extends Controller
     public function updateReview(Shops $review, Request $request)
     {
         $data = ['status' => $request->status,];
+
         $result = $review->update($data);
         if ($result) {
 
             //跳转提示信息
             session()->flash("success", "状态更新成功！");
+            //审核通过后更新redis
+            Redis::set("status",2);
             //发送成功邮件
             $this->sendEmail("您的信息已审核通过");
             return redirect()->route("shops.show", [$review]);
