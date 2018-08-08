@@ -73,6 +73,10 @@ Route::resource('events', 'EventController');
 Route::resource('eventprizes', 'EventPrizeController');
 //发送邮件测试
 Route::get("email", "EventController@sendEmail");
+//活动管理
+Route::resource('activities', 'ActivityController');
+//一键生成或更新活动静态页
+Route::get("/activityStatic", "ActivityController@activityStatic")->name("activityStatic");
 
 
 
